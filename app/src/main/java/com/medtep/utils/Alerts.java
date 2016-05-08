@@ -8,6 +8,10 @@ import android.widget.Toast;
 /**
  * Created by Alfonso on 08/05/2016.
  */
+
+/**
+ * Static class which make showing alerts easier
+ */
 public class Alerts {
 
     public static void showSimpleError(Context context, String msg) {

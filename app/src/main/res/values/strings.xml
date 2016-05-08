@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Medtep Test</string>
     <string name="title_activity_list">Patients List</string>
+    <string name="title_activity_details">Patient details</string>
 
     <string name="btn_ok">Ok</string>
     <string name="btn_accept">Accept</string>
@@ -8,6 +9,8 @@
     <string name="btn_yes">Yes</string>
     <string name="btn_no">No</string>
     <string name="btn_retry">Retry</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_delete">Delete</string>
 
     <string name="error_network">Network error!</string>
     <string name="error_patient_statuses">Error. Incorrect data input for patient statuses</string>
@@ -17,6 +20,20 @@
     <string name="loading_patients">Loading patients</string>
 
     <string name="search_hint">Search patients...</string>
+    <string name="name_hint">Patient name</string>
+    <string name="surname_hint">Patient surname</string>
+
+    <string name="details_new">New patient</string>
+    <string name="details_edit">Edit patient</string>
+
+    <string name="delete_patient_confirm">
+        This accion cannot be undo. Are you sure you want to delete the patient?
+    </string>
+
+    <string-array name="patient_actions">
+        <item>Edit patient data</item>
+        <item>Delete patient</item>
+    </string-array>
 
     <string-array name="cols">
         <item>"Id"</item>

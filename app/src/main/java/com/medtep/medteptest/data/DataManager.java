@@ -12,6 +12,10 @@ import java.util.Objects;
 /**
  * Created by Alfonso on 08/05/2016.
  */
+
+/**
+ *  Singleton class which manage patients data
+ */
 public class DataManager {
 
     public static final int SORT_ASC = 0;
@@ -21,24 +25,13 @@ public class DataManager {
     private List<Patient> mPatients;
     private List<String> mStatusTypes;
 
+    //region Init methods
+
     public static DataManager getInstance() {
         if(sInstance == null) {
             sInstance = new DataManager();
         }
         return sInstance;
-    }
-
-    private DataManager() {
-        mPatients = new ArrayList<>();
-        mStatusTypes = new ArrayList<>();
-    }
-
-    private void setStatusTypes(List<PatientStatus> statuses) {
-        for(PatientStatus status: statuses) {
-            if(!mStatusTypes.contains(status.getStatus())) {
-                mStatusTypes.add(status.getStatus());
-            }
-        }
     }
 
     public void initData(List<Patient> patients, List<PatientStatus> statuses) {
@@ -57,6 +50,37 @@ public class DataManager {
             mPatients.add(patient);
         }
     }
+
+    private DataManager() {
+        mPatients = new ArrayList<>();
+        mStatusTypes = new ArrayList<>();
+    }
+
+    //endregion
+
+    //region Private util methods
+
+    private void setStatusTypes(List<PatientStatus> statuses) {
+        for(PatientStatus status: statuses) {
+            if(!mStatusTypes.contains(status.getStatus())) {
+                mStatusTypes.add(status.getStatus());
+            }
+        }
+    }
+
+    private long getMaxId() {
+        long id = 0;
+        for(Patient patient: mPatients) {
+            if(patient.getId() > id) {
+                id = patient.getId();
+            }
+        }
+        return id;
+    }
+
+    //endregion
+
+    //region Patients management methods
 
     public List<Patient> getPatients() {
         return mPatients;
@@ -85,11 +109,43 @@ public class DataManager {
                 if(val1 instanceof Long) {
                     return (int)(asc ? (long)val1 - (long)val2 : (long)val2 - (long)val1);
                 }
-                return asc ? val1.toString().compareTo(val2.toString()) :
-                        val2.toString().compareTo(val1.toString());
+                return asc ? val1.toString().toLowerCase().compareTo(val2.toString().toLowerCase())
+                        : val2.toString().toLowerCase().compareTo(val1.toString().toLowerCase());
             }
         });
 
         return patients;
     }
+
+    public Patient getPatientById(long id) {
+        for(Patient patient: mPatients) {
+            if(patient.getId() == id) {
+                return patient;
+            }
+        }
+        return null;
+    }
+
+    public List<String> getStatusTypes() {
+        return mStatusTypes;
+    }
+
+    public void savePatient(Patient patient) {
+        if(patient.getId() == 0) {
+            patient.setId(getMaxId() + 1);
+            mPatients.add(patient);
+        }
+        else {
+            Patient editedPatient = getPatientById(patient.getId());
+            editedPatient.setName(patient.getName());
+            editedPatient.setSurname(patient.getSurname());
+            editedPatient.setStatus(patient.getStatus());
+        }
+    }
+
+    public void deletePatient(Patient patient) {
+        mPatients.remove(getPatientById(patient.getId()));
+    }
+
+    //endregion
 }

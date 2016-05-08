@@ -1,8 +1,11 @@
 package com.medtep.medteptest;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,7 +30,7 @@ import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
 
-    private DataManager dataManager;
+    private DataManager mDataManager;
 
     private RecyclerView mRecyclerView;
     private Adapter mAdapter;
@@ -49,6 +52,15 @@ public class ListActivity extends AppCompatActivity {
         initData();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            doSearchAndSort();
+        }
+    }
+
+    //region Inits
+
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,7 +69,7 @@ public class ListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO
+                newPatient();
             }
         });
 
@@ -101,14 +113,64 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        dataManager = DataManager.getInstance();
+        mDataManager = DataManager.getInstance();
 
         mAdapter = new Adapter();
-        mAdapter.setItems(dataManager.getPatients());
+        mAdapter.setItems(mDataManager.getPatients());
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    //endregion
 
+    //region Actions
+
+    private void newPatient() {
+        startActivityForResult(new Intent(ListActivity.this, DetailsActivity.class), 0);
+    }
+
+    private void editPatient(Patient patient) {
+        try {
+            startActivityForResult(new Intent(this, DetailsActivity.class)
+                .putExtra("patient", patient.toJs().toString()), 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showContextualDialog(final Patient patient) {
+        new AlertDialog.Builder(this)
+                .setItems(getResources().getStringArray(R.array.patient_actions),
+                        new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(i == 0) {
+                            editPatient(patient);
+                        }
+                        else {
+                            deletePatientDialog(patient);
+                        }
+                    }
+                })
+                .show();
+    }
+
+    private void deletePatientDialog(final Patient patient) {
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.delete_patient_confirm)
+                .setPositiveButton(R.string.btn_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        deletePatient(patient);
+                    }
+                })
+                .setNegativeButton(R.string.btn_cancel, null)
+                .show();
+    }
+
+    private void deletePatient(Patient patient) {
+        mDataManager.deletePatient(patient);
+        doSearchAndSort();
+    }
 
     private void doSearchAndSort() {
         new AsyncTask<Object, Void, List<Patient>>() {
@@ -121,7 +183,7 @@ public class ListActivity extends AppCompatActivity {
             protected List<Patient> doInBackground(Object... params) {
                 List<Patient> patients = new ArrayList<>();
                 try {
-                    patients = dataManager.getPatients(
+                    patients = mDataManager.getPatients(
                             (int) params[0],
                             (String) params[1],
                             (int) params[2],
@@ -142,6 +204,8 @@ public class ListActivity extends AppCompatActivity {
         }.execute(mSearchCols.getSelectedItemPosition(), mSearchView.getText().toString().trim(),
                 mSortCols.getSelectedItemPosition(), mSortModes.getSelectedItemPosition());
     }
+
+    //endregion
 
     class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
@@ -171,6 +235,8 @@ public class ListActivity extends AppCompatActivity {
             holder.nameView.setText(item.getName());
             holder.surnameView.setText(item.getSurname());
             holder.statusView.setText(item.getStatus());
+
+            holder.cardView.setTag(item);
         }
 
         @Override
@@ -194,6 +260,21 @@ public class ListActivity extends AppCompatActivity {
                 nameView = (TextView) itemView.findViewById(R.id.txtName);
                 surnameView = (TextView) itemView.findViewById(R.id.txtSurname);
                 statusView = (TextView) itemView.findViewById(R.id.txtStatus);
+
+                cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        editPatient((Patient) view.getTag());
+                    }
+                });
+
+                cardView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        showContextualDialog((Patient) view.getTag());
+                        return true;
+                    }
+                });
             }
         }
     }

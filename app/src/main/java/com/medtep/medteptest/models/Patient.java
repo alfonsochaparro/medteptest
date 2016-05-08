@@ -18,6 +18,13 @@ public class Patient {
     private String surname;
     private String status;
 
+    public Patient() {
+        id = 0;
+        name = "";
+        surname = "";
+        status = "";
+    }
+
     public Patient(long id, String name, String surname, String status) {
         this.id = id;
         this.name = name;
@@ -53,6 +60,7 @@ public class Patient {
     public String getSurname() { return surname; }
     public String getStatus() { return status; }
 
+    public void setId(long id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setSurname(String surname) { this.surname = surname; }
     public void setStatus(String status) { this.status = status; }

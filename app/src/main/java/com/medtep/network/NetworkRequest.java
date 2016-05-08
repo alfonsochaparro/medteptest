@@ -33,15 +33,17 @@ public class NetworkRequest extends StringRequest {
                     st.append(param.getKey() + "=" + param.getValue() + "&");
                 }
                 httpPostBody = st.toString();
-            } catch (Exception exception) {
-                Log.v("tag", "exception", exception);
-                // return null and don't pass any POST string if you encounter encoding error
+            } catch (Exception e) {
+                e.printStackTrace();
                 return null;
             }
         }
         return httpPostBody.getBytes();
     }
 
+    /**
+     *  Builder class for simple network requests creation
+     */
     public static class Builder {
 
         private Context mContext;
