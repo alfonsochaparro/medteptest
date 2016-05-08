@@ -8,16 +8,20 @@ import org.json.JSONObject;
  */
 public class Patient {
 
-    public long id;
-    public String name;
-    public String surname;
-    public String status;
+    private long id;
+    private String name;
+    private String surname;
+    private String status;
 
     public Patient(long id, String name, String surname, String status) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.status = status;
+    }
+
+    public Patient(Patient patient) {
+        this(patient.getId(), patient.getName(), patient.getSurname(), patient.getStatus());
     }
 
     public Patient(JSONObject json) throws JSONException {
@@ -38,4 +42,15 @@ public class Patient {
 
         return json;
     }
+
+    public long getId() { return id; }
+    public String getName() { return name; }
+    public String getSurname() { return surname; }
+    public String getStatus() { return status; }
+
+    public void setName(String name) { this.name = name; }
+    public void setSurname(String surname) { this.surname = surname; }
+    public void setStatus(String status) { this.status = status; }
+
+
 }

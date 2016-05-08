@@ -23,6 +23,14 @@
             android:layout_gravity="center"
             android:layout_margin="12dp"/>
 
+        <TextView
+            android:id="@+id/txtStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:layout_gravity="center"
+            android:textColor="@color/label_dark"/>
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Medtep Test</string>
+    <string name="title_activity_list">Patients List</string>
+
+    <string name="btn_ok">Ok</string>
+    <string name="btn_accept">Accept</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+    <string name="btn_retry">Retry</string>
+
+    <string name="error_network">Network error!</string>
+    <string name="error_patient_statuses">Error. Incorrect data input for patient statuses</string>
+    <string name="error_patients">Error. Incorrect data input for patients</string>
+
+    <string name="loading_statuses">Loading patient statuses</string>
+    <string name="loading_patients">Loading patients</string>
 </resources>
