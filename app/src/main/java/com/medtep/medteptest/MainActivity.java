@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -24,6 +25,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ImageView mLogo;
     private TextView mStatusView;
 
     private List<Patient> mPatients;
@@ -34,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
-
         initViews();
         initData();
     }
@@ -43,7 +43,21 @@ public class MainActivity extends AppCompatActivity {
     //region Inits
 
     private void initViews() {
+        getSupportActionBar().hide();
+
+        mLogo = (ImageView) findViewById(R.id.imgLogo);
         mStatusView = (TextView) findViewById(R.id.txtStatus);
+
+        mLogo.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mLogo.animate()
+                        .alpha(1f)
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(500);
+            }
+        }, 250);
     }
 
     private void initData() {

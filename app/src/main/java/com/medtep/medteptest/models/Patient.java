@@ -8,6 +8,11 @@ import org.json.JSONObject;
  */
 public class Patient {
 
+    public static final int COL_ID = 0;
+    public static final int COL_NAME = 1;
+    public static final int COL_SURNAME = 2;
+    public static final int COL_STATUS = 3;
+
     private long id;
     private String name;
     private String surname;
@@ -52,5 +57,15 @@ public class Patient {
     public void setSurname(String surname) { this.surname = surname; }
     public void setStatus(String status) { this.status = status; }
 
+    public Object getColValue(int col) {
+        switch (col) {
+            case COL_ID: return id;
+            case COL_NAME: return name;
+            case COL_SURNAME: return surname;
+            case COL_STATUS: return status;
+        }
+
+        return null;
+    }
 
 }

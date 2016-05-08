@@ -4,17 +4,22 @@ import com.medtep.medteptest.models.Patient;
 import com.medtep.medteptest.models.PatientStatus;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Alfonso on 08/05/2016.
  */
 public class DataManager {
 
+    public static final int SORT_ASC = 0;
+    public static final int SORT_DES = 1;
+
     private static DataManager sInstance;
     private List<Patient> mPatients;
     private List<String> mStatusTypes;
-
 
     public static DataManager getInstance() {
         if(sInstance == null) {
@@ -51,5 +56,40 @@ public class DataManager {
 
             mPatients.add(patient);
         }
+    }
+
+    public List<Patient> getPatients() {
+        return mPatients;
+    }
+
+    public List<Patient> getPatients(final int searchCol, String searchQuery, final int sortCol, int sortMode) {
+        List<Patient> patients = new ArrayList<>();
+        String query = searchQuery.toLowerCase();
+
+        for(Patient patient: mPatients) {
+            Object searchData = patient.getColValue(searchCol);
+            if(searchData != null) {
+                if (searchData.toString().toLowerCase().contains(query)) {
+                    patients.add(patient);
+                }
+            }
+        }
+
+        final boolean asc = sortMode == SORT_ASC;
+        Collections.sort(patients, new Comparator<Patient>() {
+            @Override
+            public int compare(Patient p1, Patient p2) {
+                Object val1 = p1.getColValue(sortCol);
+                Object val2 = p2.getColValue(sortCol);
+
+                if(val1 instanceof Long) {
+                    return (int)(asc ? (long)val1 - (long)val2 : (long)val2 - (long)val1);
+                }
+                return asc ? val1.toString().compareTo(val2.toString()) :
+                        val2.toString().compareTo(val1.toString());
+            }
+        });
+
+        return patients;
     }
 }

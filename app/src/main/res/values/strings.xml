@@ -15,4 +15,18 @@
 
     <string name="loading_statuses">Loading patient statuses</string>
     <string name="loading_patients">Loading patients</string>
+
+    <string name="search_hint">Search patients...</string>
+
+    <string-array name="cols">
+        <item>"Id"</item>
+        <item>"Name"</item>
+        <item>"Surname"</item>
+        <item>"Status"</item>
+    </string-array>
+
+    <string-array name="sort_modes">
+        <item>"Asc"</item>
+        <item>"Des"</item>
+    </string-array>
 </resources>
